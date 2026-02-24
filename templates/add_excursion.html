@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Добавить экскурсию — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h3 class="fw-bold mb-4"><i class="bi bi-plus-circle me-2"></i>Добавить экскурсию</h3>
+      <div class="card p-4">
+        <form method="POST">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Название *</label>
+              <input type="text" name="title" class="form-control" placeholder="Золотое кольцо России" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Описание *</label>
+              <textarea name="description" class="form-control" rows="4" required
+                        placeholder="Подробное описание экскурсии..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Маршрут / Место *</label>
+              <input type="text" name="location" class="form-control" placeholder="Москва — Ярославль" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Категория *</label>
+              <select name="category" class="form-select" required>
+                <option value="">Выберите...</option>
+                <option>Историческая</option>
+                <option>Природная</option>
+                <option>Культурная</option>
+                <option>Активная</option>
+                <option>Образовательная</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Дата отправления *</label>
+              <input type="date" name="date" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Продолжительность *</label>
+              <input type="text" name="duration" class="form-control" placeholder="3 дня" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Возрастная группа *</label>
+              <input type="text" name="age_group" class="form-control" placeholder="8-18 лет" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Цена (₽/чел) *</label>
+              <input type="number" name="price" class="form-control" placeholder="4500" min="1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Количество мест *</label>
+              <input type="number" name="seats_total" class="form-control" placeholder="20" min="1" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Ссылка на изображение</label>
+              <input type="url" name="image" class="form-control" placeholder="https://...">
+            </div>
+            <div class="col-12 d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-check-circle me-2"></i>Добавить
+              </button>
+              <a href="/admin" class="btn btn-outline-secondary px-4">Отмена</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

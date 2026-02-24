@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %}Панель администратора — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="fw-bold mb-4"><i class="bi bi-shield-check me-2"></i>Панель администратора</h2>
+
+  <!-- Статистика -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card p-3 stat-card text-center">
+        <p class="text-muted small mb-1">Экскурсий</p>
+        <h3 class="fw-bold text-primary">{{ stats.total_excursions }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card p-3 stat-card text-center">
+        <p class="text-muted small mb-1">Бронирований</p>
+        <h3 class="fw-bold text-primary">{{ stats.total_bookings }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card p-3 stat-card text-center">
+        <p class="text-muted small mb-1">Пользователей</p>
+        <h3 class="fw-bold text-primary">{{ stats.total_users }}</h3>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card p-3 stat-card text-center">
+        <p class="text-muted small mb-1">Доход (подтв.)</p>
+        <h3 class="fw-bold text-success">{{ stats.revenue }} ₽</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Вкладки -->
+  <ul class="nav nav-tabs mb-4" id="adminTabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#bookingsTab">
+        <i class="bi bi-calendar-check me-1"></i>Бронирования
+        {% if stats.pending > 0 %}
+          <span class="badge bg-warning text-dark ms-1">{{ stats.pending }}</span>
+        {% endif %}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#excursionsTab">
+        <i class="bi bi-compass me-1"></i>Экскурсии
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Бронирования -->
+    <div class="tab-pane fade show active" id="bookingsTab">
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th><th>Пользователь</th><th>Экскурсия</th>
+                <th>Дата</th><th>Кол-во</th><th>Сумма</th><th>Статус</th><th>Действие</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in bookings|sort(attribute='id', reverse=True) %}
+              <tr>
+                <td>{{ b.id }}</td>
+                <td>
+                  <strong>{{ b.user_name }}</strong><br>
+                  {% if b.child_name %}<small class="text-muted">{{ b.child_name }}</small>{% endif %}
+                </td>
+                <td>{{ b.excursion_title }}</td>
+                <td>{{ b.excursion_date }}</td>
+                <td>{{ b.count }}</td>
+                <td class="fw-bold">{{ b.total_price }} ₽</td>
+                <td>
+                  {% if b.status == 'pending' %}
+                    <span class="badge badge-pending">Ожидает</span>
+                  {% elif b.status == 'confirmed' %}
+                    <span class="badge badge-confirmed text-white">Подтверждено</span>
+                  {% elif b.status == 'cancelled' %}
+                    <span class="badge badge-cancelled text-white">Отменено</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if b.status == 'pending' %}
+                  <form method="POST" action="/admin/booking/{{ b.id }}/confirm" class="d-inline">
+                    <button class="btn btn-success btn-sm"><i class="bi bi-check"></i></button>
+                  </form>
+                  <form method="POST" action="/admin/booking/{{ b.id }}/cancel" class="d-inline">
+                    <button class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button>
+                  </form>
+                  {% else %}
+                    <span class="text-muted small">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="8" class="text-center text-muted py-4">Бронирований нет</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Экскурсии -->
+    <div class="tab-pane fade" id="excursionsTab">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Список экскурсий</h5>
+        <a href="/admin/excursion/add" class="btn btn-primary btn-sm">
+          <i class="bi bi-plus-circle me-1"></i>Добавить
+        </a>
+      </div>
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th><th>Название</th><th>Дата</th><th>Цена</th>
+                <th>Мест всего</th><th>Занято</th><th>Действие</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for exc in excursions %}
+              <tr>
+                <td>{{ exc.id }}</td>
+                <td><strong>{{ exc.title }}</strong><br><small class="text-muted">{{ exc.category }}</small></td>
+                <td>{{ exc.date }}</td>
+                <td>{{ exc.price }} ₽</td>
+                <td>{{ exc.seats_total }}</td>
+                <td>
+                  <div class="progress" style="height:8px;min-width:60px">
+                    <div class="progress-bar bg-success"
+                         style="width:{{ (exc.seats_booked / exc.seats_total * 100)|int }}%"></div>
+                  </div>
+                  <small>{{ exc.seats_booked }}/{{ exc.seats_total }}</small>
+                </td>
+                <td>
+                  <form method="POST" action="/admin/excursion/delete/{{ exc.id }}"
+                        onsubmit="return confirm('Удалить экскурсию?')" class="d-inline">
+                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

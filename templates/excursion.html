@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}{{ exc.title }} — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Главная</a></li>
+      <li class="breadcrumb-item"><a href="/catalog">Каталог</a></li>
+      <li class="breadcrumb-item active">{{ exc.title }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <!-- Левая колонка -->
+    <div class="col-lg-8">
+      <div class="card">
+        <img src="{{ exc.image }}" class="card-img-top" style="height:350px;object-fit:cover;border-radius:12px 12px 0 0"
+             alt="{{ exc.title }}" onerror="this.src='https://via.placeholder.com/800x350?text=Экскурсия'">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="badge bg-secondary mb-2">{{ exc.category }}</span>
+              <h2 class="fw-bold">{{ exc.title }}</h2>
+            </div>
+            <span class="fs-3 fw-bold text-success">{{ exc.price }} ₽<small class="fs-6 text-muted">/чел</small></span>
+          </div>
+          <p class="text-muted">{{ exc.description }}</p>
+          <hr>
+          <div class="row g-3">
+            <div class="col-6 col-md-3 text-center">
+              <i class="bi bi-geo-alt fs-4 text-primary"></i>
+              <p class="small mt-1 mb-0 text-muted">Маршрут</p>
+              <strong class="small">{{ exc.location }}</strong>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+              <i class="bi bi-calendar fs-4 text-primary"></i>
+              <p class="small mt-1 mb-0 text-muted">Дата</p>
+              <strong class="small">{{ exc.date }}</strong>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+              <i class="bi bi-clock fs-4 text-primary"></i>
+              <p class="small mt-1 mb-0 text-muted">Продолжительность</p>
+              <strong class="small">{{ exc.duration }}</strong>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+              <i class="bi bi-people fs-4 text-primary"></i>
+              <p class="small mt-1 mb-0 text-muted">Возраст</p>
+              <strong class="small">{{ exc.age_group }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка — форма бронирования -->
+    <div class="col-lg-4">
+      <div class="card p-4 sticky-top" style="top:80px">
+        <h5 class="fw-bold mb-1">Забронировать</h5>
+        {% if available > 0 %}
+          <p class="text-success small mb-3"><i class="bi bi-check-circle me-1"></i>Доступно мест: <strong>{{ available }}</strong></p>
+        {% else %}
+          <p class="text-danger small mb-3"><i class="bi bi-x-circle me-1"></i>Все места заняты</p>
+        {% endif %}
+
+        {% if session.user_id %}
+          {% if available > 0 %}
+          <form method="POST" action="/book/{{ exc.id }}">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Имя ребёнка / участника</label>
+              <input type="text" name="child_name" class="form-control" placeholder="Иванов Иван" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Количество мест</label>
+              <select name="count" class="form-select">
+                {% for i in range(1, [available+1, 6]|min) %}
+                  <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Комментарий <span class="text-muted">(необязательно)</span></label>
+              <textarea name="comment" class="form-control" rows="2" placeholder="Особые пожелания..."></textarea>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-calendar-check me-2"></i>Забронировать
+              </button>
+            </div>
+            <p class="small text-muted text-center mt-2">После бронирования ожидайте подтверждения от администратора</p>
+          </form>
+          {% else %}
+            <div class="alert alert-danger text-center">К сожалению, мест нет</div>
+          {% endif %}
+        {% else %}
+          <div class="alert alert-warning text-center">
+            <i class="bi bi-person-lock me-2"></i>
+            Чтобы забронировать, необходимо
+            <a href="/login" class="fw-bold">войти</a> или
+            <a href="/register" class="fw-bold">зарегистрироваться</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

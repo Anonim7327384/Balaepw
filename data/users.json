@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "name": "Администратор",
+    "email": "admin@excursions.ru",
+    "password": "scrypt:32768:8:1$3Gg6hCJLXi4sFnnp$d4ad52cdfdbf73cd1ce5127232e7f3b8bea49cc3587c76b4efd4c7dfd2ac041bcaa91f602e9d7a4752156f3111cce146de9a5e352db5f256820d01bc2a56bdc8",
+    "role": "admin",
+    "phone": "+7 (999) 000-00-00",
+    "created_at": "2024-01-01"
+  }
+]

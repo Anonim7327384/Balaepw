@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card p-4">
+        <h3 class="fw-bold text-center mb-4"><i class="bi bi-person-plus me-2"></i>Регистрация</h3>
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Полное имя *</label>
+            <input type="text" name="name" class="form-control" placeholder="Иванов Иван Иванович" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email *</label>
+            <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Телефон</label>
+            <input type="tel" name="phone" class="form-control" placeholder="+7 (999) 000-00-00">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Пароль *</label>
+            <input type="password" name="password" class="form-control" placeholder="Минимум 6 символов" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Повторите пароль *</label>
+            <input type="password" name="confirm" class="form-control" placeholder="Повторите пароль" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Зарегистрироваться</button>
+          </div>
+        </form>
+        <hr>
+        <p class="text-center text-muted mb-0">Уже есть аккаунт? <a href="/login" class="fw-semibold">Войти</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

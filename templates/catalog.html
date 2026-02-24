@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Каталог экскурсий — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="fw-bold mb-4"><i class="bi bi-grid me-2"></i>Каталог экскурсий</h2>
+
+  <!-- Фильтры -->
+  <div class="card mb-4 p-3">
+    <form method="GET" class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label fw-semibold">Поиск</label>
+        <input type="text" name="search" value="{{ search }}" class="form-control"
+               placeholder="Название или описание...">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Категория</label>
+        <select name="category" class="form-select">
+          <option value="">Все категории</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i>Найти</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Результаты -->
+  {% if excursions %}
+  <p class="text-muted">Найдено: <strong>{{ excursions|length }}</strong> экскурсий</p>
+  <div class="row g-4">
+    {% for exc in excursions %}
+    <div class="col-md-4">
+      <div class="card h-100">
+        <img src="{{ exc.image }}" class="card-img-top" alt="{{ exc.title }}"
+             onerror="this.src='https://via.placeholder.com/400x200?text=Экскурсия'">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="badge bg-secondary">{{ exc.category }}</span>
+            {% set available = exc.seats_total - exc.seats_booked %}
+            {% if available == 0 %}
+              <span class="badge bg-danger">Мест нет</span>
+            {% elif available <= 3 %}
+              <span class="badge bg-warning text-dark">Осталось {{ available }}</span>
+            {% else %}
+              <span class="badge bg-success">Мест: {{ available }}</span>
+            {% endif %}
+          </div>
+          <h5 class="card-title fw-bold">{{ exc.title }}</h5>
+          <p class="card-text text-muted small flex-grow-1">{{ exc.description[:120] }}...</p>
+          <ul class="list-unstyled small text-muted mb-3">
+            <li><i class="bi bi-geo-alt me-1"></i>{{ exc.location }}</li>
+            <li><i class="bi bi-calendar me-1"></i>{{ exc.date }}</li>
+            <li><i class="bi bi-clock me-1"></i>{{ exc.duration }}</li>
+            <li><i class="bi bi-people me-1"></i>{{ exc.age_group }}</li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fs-5 fw-bold text-success">{{ exc.price }} ₽</span>
+            <a href="/excursion/{{ exc.id }}" class="btn btn-primary btn-sm">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-search fs-1 text-muted"></i>
+    <p class="mt-3 text-muted fs-5">Ничего не найдено. Попробуйте изменить параметры поиска.</p>
+    <a href="/catalog" class="btn btn-outline-primary">Сбросить фильтры</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
