@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from werkzeug.middleware.proxy_fix import ProxyFix
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = 'excursion_secret_key_2024'
 
 # ─── Пути к файлам данных ───────────────────────────────────────────────────
@@ -341,6 +339,36 @@ def add_excursion():
     return render_template('add_excursion.html')
 
 
+# ─── Редактирование экскурсии (admin) ────────────────────────────────────────
+@app.route('/admin/excursion/edit/<int:exc_id>', methods=['GET', 'POST'])
+@admin_required
+def edit_excursion(exc_id):
+    excursions = read_json(EXCURSIONS_FILE)
+    exc = next((e for e in excursions if e['id'] == exc_id), None)
+    if not exc:
+        flash('Экскурсия не найдена', 'danger')
+        return redirect(url_for('admin'))
+
+    if request.method == 'POST':
+        exc['title']       = request.form.get('title')
+        exc['description'] = request.form.get('description')
+        exc['location']    = request.form.get('location')
+        exc['date']        = request.form.get('date')
+        exc['duration']    = request.form.get('duration')
+        exc['price']       = int(request.form.get('price', 0))
+        exc['seats_total'] = int(request.form.get('seats_total', 10))
+        exc['age_group']   = request.form.get('age_group')
+        exc['category']    = request.form.get('category')
+        image_val          = request.form.get('image', '').strip()
+        if image_val:
+            exc['image']   = image_val
+        write_json(EXCURSIONS_FILE, excursions)
+        flash('Экскурсия обновлена', 'success')
+        return redirect(url_for('admin'))
+
+    return render_template('edit_excursion.html', exc=exc)
+
+
 # ─── Удаление экскурсии (admin) ──────────────────────────────────────────────
 @app.route('/admin/excursion/delete/<int:exc_id>', methods=['POST'])
 @admin_required
@@ -352,7 +380,5 @@ def delete_excursion(exc_id):
     return redirect(url_for('admin'))
 
 
-#if __name__ == '__main__':
-    #app.run(debug=True, host='0.0.0.0', port=5000)
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)

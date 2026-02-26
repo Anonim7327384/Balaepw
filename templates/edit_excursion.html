@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Редактировать экскурсию — ЦДЮТиЭ{% endblock %}
+{% block content %}
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h3 class="fw-bold mb-4"><i class="bi bi-pencil-square me-2"></i>Редактировать экскурсию</h3>
+      <div class="card p-4">
+        <form method="POST">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Название *</label>
+              <input type="text" name="title" class="form-control" value="{{ exc.title }}" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Описание *</label>
+              <textarea name="description" class="form-control" rows="4" required>{{ exc.description }}</textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Маршрут / Место *</label>
+              <input type="text" name="location" class="form-control" value="{{ exc.location }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Категория *</label>
+              <select name="category" class="form-select" required>
+                {% for cat in ['Историческая', 'Природная', 'Культурная', 'Активная', 'Образовательная'] %}
+                  <option value="{{ cat }}" {% if cat == exc.category %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Дата отправления *</label>
+              <input type="date" name="date" class="form-control" value="{{ exc.date }}" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Продолжительность *</label>
+              <input type="text" name="duration" class="form-control" value="{{ exc.duration }}" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Возрастная группа *</label>
+              <input type="text" name="age_group" class="form-control" value="{{ exc.age_group }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Цена (₽/чел) *</label>
+              <input type="number" name="price" class="form-control" value="{{ exc.price }}" min="1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Количество мест *</label>
+              <input type="number" name="seats_total" class="form-control" value="{{ exc.seats_total }}" min="1" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Путь к изображению</label>
+              <input type="text" name="image" class="form-control" value="{{ exc.image }}"
+                     placeholder="/static/images/excursion1.jpg">
+              <div class="form-text">Оставьте текущее или укажите новый путь, например: /static/images/excursion1.jpg</div>
+            </div>
+            {% if exc.image %}
+            <div class="col-12">
+              <p class="form-label fw-semibold mb-1">Текущее фото:</p>
+              <img src="{{ exc.image }}" style="height:120px;object-fit:cover;border-radius:8px"
+                   onerror="this.style.display='none'">
+            </div>
+            {% endif %}
+            <div class="col-12 d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-check-circle me-2"></i>Сохранить
+              </button>
+              <a href="/admin" class="btn btn-outline-secondary px-4">Отмена</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

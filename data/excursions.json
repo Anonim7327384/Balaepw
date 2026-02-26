@@ -9,7 +9,7 @@
     "price": 4500,
     "seats_total": 20,
     "seats_booked": 5,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Sergiev_Posad_-_Lavra.jpg/640px-Sergiev_Posad_-_Lavra.jpg",
+    "image": "/static/images/excursion1.jpg",
     "age_group": "6-18 лет",
     "category": "Историческая"
   },
@@ -22,8 +22,8 @@
     "duration": "5 дней",
     "price": 8900,
     "seats_total": 15,
-    "seats_booked": 4,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Baikal_in_winter.jpg/640px-Baikal_in_winter.jpg",
+    "seats_booked": 3,
+    "image": "/static/images/excursion2.jpg",
     "age_group": "10-18 лет",
     "category": "Природная"
   },
@@ -37,7 +37,7 @@
     "price": 6200,
     "seats_total": 25,
     "seats_booked": 12,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Hermitage_from_Neva_crop.jpg/640px-Hermitage_from_Neva_crop.jpg",
+    "image": "/static/images/excursion3.jpg",
     "age_group": "8-18 лет",
     "category": "Культурная"
   },
@@ -51,7 +51,7 @@
     "price": 3100,
     "seats_total": 30,
     "seats_booked": 0,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Kazan_Kremlin_from_river.jpg/640px-Kazan_Kremlin_from_river.jpg",
+    "image": "/static/images/excursion4.jpg",
     "age_group": "7-16 лет",
     "category": "Культурная"
   },
@@ -65,7 +65,7 @@
     "price": 7400,
     "seats_total": 18,
     "seats_booked": 9,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Kivach_falls.jpg/640px-Kivach_falls.jpg",
+    "image": "/static/images/excursion5.jpg",
     "age_group": "12-18 лет",
     "category": "Активная"
   }
